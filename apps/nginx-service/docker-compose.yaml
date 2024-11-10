@@ -1,0 +1,23 @@
+---
+services:
+  nginx:
+    container_name: nginx-service
+    image: nginx:latest
+    restart: unless-stopped
+    networks:
+      - traefik_network
+    labels:
+      - traefik.enable=true
+      #- traefik.http.routers.nginx.rule=Host(`pi4b.bgrfacile.com`) && PathPrefix(`/nginx`)
+      - traefik.http.routers.nginx.rule=PathPrefix(`/nginx`)
+      - traefik.http.middlewares.nginx-stripprefix.stripprefix.prefixes=/nginx
+      - traefik.http.routers.nginx.middlewares=nginx-stripprefix
+      - traefik.http.routers.nginx.entrypoints=web
+      #- "traefik.http.routers.nginx-secure.rule=Host(`pi4b.bgrfacile.com) && PathPrefix(`/nginx`)"
+      #- traefik.http.routers.nginx-secure.rule=PathPrefix(`/nginx`)
+      #- traefik.http.routers.nginx-secure.entrypoints=websecure
+      #- traefik.http.routers.nginx-secure.tls=true
+      #- traefik.http.routers.nginx-secure.tls.certresolver=cloudflare
+networks:
+  traefik_network:
+    external: true

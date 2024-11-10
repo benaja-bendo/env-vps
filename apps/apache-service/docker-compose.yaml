@@ -1,0 +1,20 @@
+---
+services:
+  apache:
+    image: httpd:latest
+    container_name: apache-service
+    networks:
+      - traefik_network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.apache.rule=PathPrefix(`/apache`)
+      - traefik.http.routers.apache.entrypoints=web
+      - traefik.http.middlewares.apache-stripprefix.stripprefix.prefixes=/apache
+      - traefik.http.routers.apache.middlewares=apache-stripprefix
+      #- traefik.http.routers.apache-secure.rule=PathPrefix(`/apache`)
+      #- traefik.http.routers.apache-secure.entrypoints=websecure
+      #- traefik.http.routers.apache-secure.tls=true
+      #- traefik.http.routers.apache-secure.tls.certresolver=cloudflare
+networks:
+  traefik_network:
+    external: true

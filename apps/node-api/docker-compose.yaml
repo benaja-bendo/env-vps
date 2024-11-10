@@ -1,0 +1,22 @@
+---
+services:
+  node-api:
+    container_name: node-api-service
+    build: .
+    environment:
+      - PORT=3000
+    networks:
+      - traefik_network
+    labels:
+      - traefik.enable=true
+      #- traefik.http.routers.nginx.rule=Host(`pi4b.bgrfacile.com`) && PathPrefix(`/nginx`)
+      - traefik.http.routers.node-api.rule=PathPrefix(`/node-api`)
+      - traefik.http.middlewares.node-api-stripprefix.stripprefix.prefixes=/node-api
+      - traefik.http.routers.node-api.middlewares=node-api-stripprefix
+      - traefik.http.routers.node-api.entrypoints=web
+      - traefik.http.services.node-api.loadbalancer.server.port=3000
+    expose:
+      - 3000
+networks:
+  traefik_network:
+    external: true
