@@ -7,6 +7,8 @@ api:
   dashboard: true
   insecure: true
 entryPoints:
+  postgres:
+    address: ":5432"
   web:
     address: :80
 #    http:

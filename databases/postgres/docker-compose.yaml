@@ -1,0 +1,19 @@
+---
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: first-db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    networks:
+      - traefik_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.postgres.entrypoints=postgres"
+      - "traefik.tcp.routers.postgres.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.postgres.service=postgres"
+      - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
+networks:
+  traefik_network:
+    external: true

@@ -1,0 +1,19 @@
+---
+services:
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    networks:
+      - traefik_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.tcp.routers.mongo.entrypoints=mongo"
+      - "traefik.tcp.routers.mongo.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.mongo.service=mongo"
+      - "traefik.tcp.services.mongo.loadbalancer.server.port=27017"
+
+networks:
+  traefik_network:
+    external: true
