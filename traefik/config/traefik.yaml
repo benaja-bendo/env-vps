@@ -8,14 +8,20 @@ api:
   insecure: true
 entryPoints:
   postgres:
-    address: ":5432"
+    address: :5432
+  pgadmin:
+    address: :8082
+  mongo:
+    address: :27017
+  mongo-express:
+    address: :8081
   web:
     address: :80
-#    http:
-#      redirections:
-#        entryPoint:
-#          to: websecure
-#          scheme: https
+  #    http:
+  #      redirections:
+  #        entryPoint:
+  #          to: websecure
+  #          scheme: https
   websecure:
     address: :443
 #certificatesResolvers:
