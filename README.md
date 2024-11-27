@@ -1,4 +1,4 @@
-# poc-env-traefik
+# env-vps
 
 Ce dépôt propose un exemple d'environnement pour déployer Traefik sur un VPS, avec des services tels que PostgreSQL et MongoDB.
 
@@ -6,6 +6,68 @@ Ce dépôt propose un exemple d'environnement pour déployer Traefik sur un VPS,
 
 - `Docker` : Assurez-vous que Docker est installé sur votre machine.
 - `Docker Compose` : Vérifiez que Docker Compose est également installé.
+- `Git` : Pour gérer le versionnement de votre projet.
+
+### Configuration de Git avec SSH sur le VPS
+
+Pour utiliser Git avec SSH sur votre VPS, suivez les étapes suivantes :
+
+#### Étape 1 : Installer Git
+Si Git n'est pas déjà installé, installez-le sur votre VPS :
+```bash
+sudo apt update
+sudo apt install git -y
+```
+
+#### Étape 2 : Configurer votre identité Git
+
+Définissez votre nom d'utilisateur et votre email global pour Git :
+
+```bash
+git config --global user.name "VotreNom"
+git config --global user.email "VotreEmail@example.com"
+```
+
+Vous pouvez vérifier la configuration avec :
+```bash
+git config --list
+```
+#### Étape 3 : Générer une clé SSH
+
+Créez une nouvelle paire de clés SSH pour authentifier vos opérations Git avec GitHub :
+
+```bash
+ssh-keygen -t ed25519 -C "VotreEmail@example.com"
+```
+- Lorsque demandé, appuyez sur Entrée pour utiliser l'emplacement par défaut (~/.ssh/id_ed25519).
+- Optionnel : Ajoutez une passphrase pour plus de sécurité.
+
+#### Étape 4 : Ajouter la clé SSH à l'agent
+
+Activez l'agent SSH et ajoutez votre clé privée :
+
+```bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+```
+
+#### Étape 5 : Ajouter la clé publique à GitHub
+
+1. Affichez le contenu de votre clé publique :
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+2. Copiez la clé affichée.
+3. Connectez-vous à GitHub, puis allez dans Settings > SSH and GPG keys > New SSH Key.
+4. Collez votre clé publique et donnez-lui un nom descriptif (par exemple, `VPS`).
+
+#### Étape 6 : Tester la connexion SSH
+
+Vérifiez que la connexion avec GitHub fonctionne correctement :
+```bash
+ssh -T git@github.com
+```
+Vous devriez voir un message confirmant que l'authentification est réussie.
 
 ## Structure du projet
 
