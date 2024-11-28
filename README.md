@@ -69,6 +69,38 @@ ssh -T git@github.com
 ```
 Vous devriez voir un message confirmant que l'authentification est réussie.
 
+### Gestion des utilisateurs sur le VPS
+
+#### Modifier le mot de passe de l'utilisateur actuel
+Si vous devez modifier le mot de passe de l'utilisateur actuel sur votre VPS, suivez les étapes ci-dessous :
+
+#### Connectez-vous au VPS via SSH
+Utilisez la commande suivante pour changer le mot de passe de l'utilisateur connecté :
+```bash
+whoami
+```
+puis 
+```bash 
+ sudo passwd <user_actuel>
+```
+Entrez le nouveau mot de passe lorsqu'il est demandé. Confirmez-le.
+Cette commande met à jour le mot de passe de l'utilisateur actuel.
+
+#### Créer un nouvel utilisateur avec un mot de passe
+
+- Créez le nouvel utilisateur en remplaçant nouvel_utilisateur par le nom souhaité :
+
+```bash
+sudo adduser nouvel_utilisateur
+```
+Vous serez invité à définir un mot de passe et des informations supplémentaires (facultatives).
+
+- (Optionnel) Donnez à cet utilisateur des privilèges administratifs (sudo) :
+
+```bash
+sudo usermod -aG sudo nouvel_utilisateur
+```
+
 ## Structure du projet
 
 - `traefik/` : Contient la configuration de Traefik.
