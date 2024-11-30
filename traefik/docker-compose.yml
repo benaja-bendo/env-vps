@@ -9,14 +9,15 @@ services:
       - "443:443"
       - "8080:8080"
     environment:
-      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
-      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN:-}
+      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL:-}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
-      - /var/traefik/certs/cloudfare-acme.json:/var/traefik/certs/
+      - ./config/acme.json:/acme.json
     networks:
       - traefik_network
+
 networks:
   traefik_network:
     external: true
