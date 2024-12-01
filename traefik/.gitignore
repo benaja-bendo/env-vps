@@ -1,2 +1,2 @@
 .env
-./config/acme.json
+config/acme.json
