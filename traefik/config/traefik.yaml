@@ -12,6 +12,11 @@ api:
 entryPoints:
   dashboard:
     address: :8080
+    http:
+     redirections:
+       entryPoint:
+         to: websecure
+         scheme: https
   web:
     address: :80
     http:
@@ -28,11 +33,16 @@ entryPoints:
     address: :5432
   pgadmin:
     address: :8082
+    http:
+      redirections:
+        entryPoint:
+          to: web
+          scheme: http
   mongo:
     address: :27017
   mongo-express:
     address: :8081
-  
+
 certificatesResolvers:
   letsencrypt:
     acme:
