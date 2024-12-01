@@ -28,6 +28,11 @@ services:
       - traefik_network
     volumes:
       - ./servers.json:/pgadmin4/servers.json
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.pgadmin.rule=Host(`app.benaja-bendo.fr`)
+      - traefik.http.routers.pgadmin.entrypoints=pgadmin
+      - traefik.http.services.pgadmin.loadbalancer.server.port=8082
 networks:
   traefik_network:
     external: true
