@@ -17,6 +17,13 @@ services:
       - ./config/acme.json:/acme.json
     networks:
       - traefik_network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik-dashboard.rule=Host(`app.benaja-bendo.fr`)
+      - traefik.http.routers.traefik-dashboard.entryPoints=dashboard
+      - traefik.http.routers.traefik-dashboard.service=api@internal
+      - traefik.http.routers.traefik-dashboard.tls.certResolver=letsencrypt
+      - traefik.http.services.traefik-dashboard.loadbalancer.server.port=8080
 
 networks:
   traefik_network:

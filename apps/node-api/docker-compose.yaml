@@ -11,7 +11,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.node-api.rule=Host(`${SERVER_IP}`)
-      #- traefik.http.routers.nginx.rule=Host(`pi4b.bgrfacile.com`) && PathPrefix(`/nginx`)
       # - traefik.http.routers.node-api.rule=PathPrefix(`/node-api`)
       # - traefik.http.middlewares.node-api-stripprefix.stripprefix.prefixes=/node-api
       # - traefik.http.routers.node-api.middlewares=node-api-stripprefix
