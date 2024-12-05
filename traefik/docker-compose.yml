@@ -19,7 +19,7 @@ services:
       - traefik_network
     labels:
       - traefik.enable=true
-      - traefik.http.routers.traefik-dashboard.rule=Host(`app.benaja-bendo.fr`)
+      - traefik.http.routers.traefik-dashboard.rule=Host(`${DOMAINE_NAME}`)
       - traefik.http.routers.traefik-dashboard.entryPoints=dashboard
       - traefik.http.routers.traefik-dashboard.service=api@internal
       - traefik.http.routers.traefik-dashboard.tls.certResolver=letsencrypt
