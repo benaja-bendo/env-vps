@@ -39,6 +39,9 @@ Créez une nouvelle paire de clés SSH pour authentifier vos opérations Git ave
 ```bash
 ssh-keygen -t ed25519 -C "VotreEmail@example.com"
 ```
+```bash
+ssh-keygen -t ed25519 -C "votre_email@example.com" -N "" -f ~/.ssh/id_ed25519_deploie
+```
 - Lorsque demandé, appuyez sur Entrée pour utiliser l'emplacement par défaut (~/.ssh/id_ed25519).
 - Optionnel : Ajoutez une passphrase pour plus de sécurité.
 
