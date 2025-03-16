@@ -1,0 +1,80 @@
+---
+
+services:
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    container_name: prometheus
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prometheus.rule=Host(`${SUB_DOMAINE_PROMETHEUS:-prometheus.bgrfacile.com}`)
+      - traefik.http.routers.prometheus.entrypoints=websecure
+      - traefik.http.routers.prometheus.tls.certresolver=le
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin # Changez ce mot de passe
+      - GF_SERVER_ROOT_URL=https://${SUB_DOMAINE_GRAFANA:-grafana.bgrfacile.com}
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`${SUB_DOMAINE_GRAFANA:-grafana.bgrfacile.com}`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls.certresolver=le
+
+  loki:
+      image: grafana/loki:latest
+      container_name: loki
+      restart: unless-stopped
+      networks:
+        - traefik-network
+      volumes:
+        - loki-data:/loki
+        - ./loki/loki-config.yml:/etc/loki/local-config.yaml:ro
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.loki.rule=Host(`${SUB_DOMAINE_LOKI:-loki.bgrfacile.com}`)
+        - traefik.http.routers.loki.entrypoints=websecure
+        - traefik.http.routers.loki.tls.certresolver=le
+        - traefik.http.services.loki.loadbalancer.server.port=3100
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    #ports:
+    #  - "16686:16686" # Interface web de Jaeger
+    #  - "6831:6831/udp" # Agent UDP
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jaeger.rule=Host(`${SUB_DOMAINE_JAEGER:-jaeger.bgrfacile.com}`)
+      - traefik.http.routers.jaeger.entrypoints=websecure
+      - traefik.http.routers.jaeger.tls.certresolver=le
+      - traefik.http.services.jaeger.loadbalancer.server.port=16686
+
+volumes:
+  grafana-data:
+  loki-data:
+
+
+networks:
+  traefik-network:
+    external: true
+    name: traefik-network

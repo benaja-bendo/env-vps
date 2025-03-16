@@ -1,0 +1,21 @@
+---
+services:
+  dashy:
+    image: lissy93/dashy:latest
+    container_name: dashy
+    volumes:
+      - ./conf.yml:/app/public/conf.yml
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dashy.rule=Host(`${SUB_DOMAINE:-dashy.bgrfacile.com}`)
+      - traefik.http.routers.dashy.entrypoints=websecure
+      - traefik.http.routers.dashy.tls.certresolver=le
+      - traefik.http.services.dashy.loadbalancer.server.port=8080
+    networks:
+      - traefik-network
+
+networks:
+  traefik-network:
+    external: true
+    name: traefik-network

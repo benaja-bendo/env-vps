@@ -1,0 +1,48 @@
+---
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      # Nom de la base de données initialisée
+      MONGO_INITDB_DATABASE: db_mongo
+      # Identifiants pour l'utilisateur root
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - traefik-network
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: unless-stopped
+    environment:
+      # Indique à mongo-express sur quel hôte se trouve MongoDB (le nom du service)
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
+    depends_on:
+      - mongo
+    networks:
+      - traefik-network
+    expose:
+      - "8081"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mongo-express.rule=Host(`${SUB_DOMAINE:-mongo-express.bgrfacile.com}`)
+      - traefik.http.routers.mongo-express.entrypoints=websecure
+      - traefik.http.routers.mongo-express.tls.certresolver=le
+      - traefik.http.routers.mongo-express.middlewares=auth@file
+      - traefik.http.services.mongo-express.loadbalancer.server.port=8081
+
+volumes:
+  mongo_data:
+
+networks:
+  traefik-network:
+    external: true
+    name: traefik-network

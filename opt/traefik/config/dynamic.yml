@@ -1,0 +1,17 @@
+http:
+  middlewares:
+    security-headers:
+      headers:
+        sslRedirect: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        forceSTSHeader: true
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+
+    auth:
+      basicAuth:
+        users:
+          - "admin:$2y$05$XvR5QIc5wMZZiyT2MVOTt.Alhd9kiX3txVZwwJYLfyz2ncxRDUHDG" # htpasswd -> benji
