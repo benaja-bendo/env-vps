@@ -1,0 +1,43 @@
+---
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: db_first
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - traefik-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@bgrfacile.com
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+    depends_on:
+      - postgres
+    networks:
+      - traefik-network
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
+      - pgadmin_data:/var/lib/pgadmin
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.pgadmin.rule=Host(`${SUB_DOMAINE:-pgadmin.bgrfacile.com}`)
+      - traefik.http.routers.pgadmin.entrypoints=websecure
+      - traefik.http.routers.pgadmin.tls.certresolver=le
+      - traefik.http.routers.pgadmin.middlewares=auth@file
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  traefik-network:
+    external: true
+    name: traefik-network

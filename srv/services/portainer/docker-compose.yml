@@ -1,0 +1,26 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - traefik-network
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.portainer.rule=Host(`${SUB_DOMAINE:-portainer.bgrfacile.com}`)
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.tls.certresolver=le
+      #- traefik.http.routers.portainer.middlewares=auth@file
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
+
+volumes:
+  portainer_data:
+
+networks:
+  traefik-network:
+    external: true
+    name: traefik-network

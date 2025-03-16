@@ -1,0 +1,32 @@
+# Informations principales
+title: "Mon Dashboard"
+subtitle: "Tableau de bord centralisé pour mes outils et liens"
+theme: "dark"         # Options : "dark" ou "light"
+accent_color: "#E94B3C"
+
+# En-tête du dashboard (optionnel)
+header:
+  logo: "/assets/logo.png"      # Chemin vers votre logo, à placer dans le dossier public si besoin
+  title: "Mon Dashboard"
+  subtitle: "Accès rapide à mes services"
+  search_enabled: true          # Afficher la barre de recherche
+
+# Liens ou raccourcis
+links:
+  - name: "Google"
+    url: "https://www.google.com"
+    icon: "fas fa-search"       # Utilise FontAwesome pour les icônes
+    new_window: true
+  - name: "GitHub"
+    url: "https://github.com"
+    icon: "fab fa-github"
+    new_window: true
+  - name: "Traefik Dashboard"
+    url: "https://traefik.bgrfacile.com"
+    icon: "fas fa-network-wired"
+    new_window: true
+
+# Pied de page (optionnel)
+footer:
+  text: "© 2025 Mon Dashboard"
+  show_date: true

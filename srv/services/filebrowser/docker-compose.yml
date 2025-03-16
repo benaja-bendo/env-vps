@@ -1,0 +1,19 @@
+---
+services:
+  filebrowser:
+    image: filebrowser/filebrowser
+    container_name: filebrowser
+    volumes:
+      - ./data:/srv
+      - ./filebrowser.db:/database.db
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.filebrowser.rule=Host(`filebrowser.bgrfacile.com`)
+      - traefik.http.routers.filebrowser.entrypoints=websecure
+      - traefik.http.routers.filebrowser.tls.certresolver=le
+      - traefik.http.services.filebrowser.loadbalancer.server.port=8080
